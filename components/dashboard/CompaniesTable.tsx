@@ -14,9 +14,9 @@ interface CompaniesTableProps {
 
 export default function CompaniesTable({ companies }: CompaniesTableProps) {
   return (
-    <table className="w-full text-sm">
+    <table className="w-full text-sm text-gray-200">
       <thead>
-        <tr className="border-b">
+        <tr className="border-sm">
           <th className="text-left py-2">Company Name</th>
           <th className="text-left py-2">Reg. No</th>
           <th className="text-left py-2">Jobs</th>
@@ -26,7 +26,7 @@ export default function CompaniesTable({ companies }: CompaniesTableProps) {
       </thead>
       <tbody>
         {companies.map((company, index) => (
-          <tr key={index} className="border-b">
+          <tr key={index} className="border-b text-gray-200">
             <td className="py-2 flex items-center">
               <Image
                 src="https://via.placeholder.com/32"

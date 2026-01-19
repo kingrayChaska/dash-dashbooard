@@ -7,7 +7,7 @@ import Header from "../components/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Skills Fusion Dashboard",
+  title: "Chaska Industries Dashboard",
 };
 
 export default function RootLayout({

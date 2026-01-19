@@ -13,11 +13,11 @@ interface ActivityLogProps {
 
 export default function ActivityLog({ activities }: ActivityLogProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-gray-200">
       {activities.map((activity, index) => (
         <div key={index} className="flex items-start space-x-3">
-          <Image
-            src="https://via.placeholder.com/32"
+          <img
+            src="c44.jpg"
             alt="User"
             width={32}
             height={32}
@@ -28,13 +28,15 @@ export default function ActivityLog({ activities }: ActivityLogProps) {
               <span className="font-semibold">{activity.user}</span>{" "}
               {activity.action}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-200">
               Status: {activity.status} · {activity.time}
             </p>
           </div>
         </div>
       ))}
-      <button className="text-blue-500 text-sm">See All Activities</button>
+      <a href="#" className="text-blue-500 text-sm">
+        See All Activities
+      </a>
     </div>
   );
 }

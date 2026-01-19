@@ -11,8 +11,6 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Welcome to Skill Fusion</h1>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#628563] p-4 rounded-lg">
         {stats.map((stat, index) => (
@@ -21,24 +19,32 @@ export default function Dashboard() {
       </div>
 
       {/* Chart and Activity Log */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-[#F5F4E6] p-4 rounded-lg shadow">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="bg-[#628563] p-4 rounded-lg shadow">
           <div className="flex justify-between mb-4">
-            <h3 className="font-semibold">Post Statistics</h3>
+            <h3 className="text-gray-200 font-semibold">Post Statistics</h3>
             <select
               className="text-sm border rounded p-1"
               title="Select time range"
             >
-              <option>Last Month</option>
+              <option className="text-gray-500">Two Months Ago</option>
+              <option className="text-gray-500">Last Month</option>
+              <option className="text-gray-500">This Month</option>
+            </select>
+            <select
+              className="text-sm border rounded p-1"
+              title="Select time range"
+            >
+              <option className="text-gray-500">Jobs Only</option>
             </select>
           </div>
           <PostStatsChart data={chartData} />
         </div>
-        <div className="bg-[#F5F4E6] p-4 rounded-lg shadow">
+        <div className="bg-[#628563] p-4 rounded-lg shadow">
           <div className="flex justify-between mb-4">
-            <h3 className="font-semibold">Activity Log</h3>
+            <h3 className="text-gray-200 font-semibold">Activity Log</h3>
             <select
-              className="text-sm border rounded p-1"
+              className="text-sm text-gray-200 border rounded p-1"
               title="Select activity period"
             >
               <option>Today</option>
@@ -49,14 +55,16 @@ export default function Dashboard() {
       </div>
 
       {/* Companies Table */}
-      <div className="bg-[#F5F4E6] p-4 rounded-lg shadow">
-        <div className="flex justify-between mb-4">
-          <h3 className="font-semibold">Companies Statistics</h3>
+      <div className="bg-[#628563] p-4 rounded-lg shadow">
+        <div className="text-gray-200 flex justify-between mb-4">
+          <h3 className=" font-semibold">Companies Statistics</h3>
           <select
             className="text-sm border rounded p-1"
             title="Select company stats period"
           >
+            <option>Monthly</option>
             <option>Weekly</option>
+            <option>Daily</option>
           </select>
         </div>
         <CompaniesTable companies={companies} />
