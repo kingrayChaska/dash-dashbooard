@@ -7,6 +7,19 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "slide-in-from-top-2": {
+          "0%": { transform: "translateY(-0.5rem)" },
+          "100%": { transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        in: "fade-in 0.2s ease-out",
+      },
       colors: {
         primary: "#3b82f6", // Blue for accents
         secondary: "#10b981", // Green for projects
