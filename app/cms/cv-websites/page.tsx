@@ -21,7 +21,11 @@ import {
 } from "lucide-react";
 import { cn } from "@/utils/formatDate";
 import Image from "next/image";
-import { cvWebsites, CVWebsite, StatsCardProps } from "../../../data/mockCvData";
+import {
+  cvWebsites,
+  CVWebsite,
+  StatsCardProps,
+} from "../../../data/mockCvData";
 
 function StatsCard({ title, value, icon, color }: StatsCardProps) {
   return (
