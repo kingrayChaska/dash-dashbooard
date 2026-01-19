@@ -26,9 +26,14 @@ interface NavSection {
 // Navigation configuration
 const navigationSections: NavSection[] = [
   {
+    title: "Dashboard",
     items: [
-      { label: "Dashboard", href: "/", icon: Grid, isActive: true },
-      { label: "Announcements", href: "/announcements", icon: Bell },
+      {
+        label: "Announcements",
+        href: "/announcements",
+        icon: Bell,
+        isActive: false,
+      },
     ],
   },
   {
@@ -41,15 +46,6 @@ const navigationSections: NavSection[] = [
       { label: "All Students", href: "/students", icon: Users },
       { label: "Requests", href: "/students/requests", icon: Clipboard },
       { label: "Reports", href: "/students/reports", icon: FileText },
-    ],
-  },
-  {
-    title: "SOFTWARE HOUSE",
-    items: [
-      { label: "All Companies", href: "/companies", icon: Building },
-      { label: "Companies Post", href: "/companies/posts", icon: FileText },
-      { label: "Requests", href: "/companies/requests", icon: Clipboard },
-      { label: "Reports", href: "/companies/reports", icon: FileText },
     ],
   },
 ];
@@ -91,7 +87,7 @@ function NavItemComponent({
           isNested && "ml-4",
           isActive
             ? "font-semibold text-[#628563] bg-[#628563]/10"
-            : "text-gray-600 hover:text-[#628563] hover:bg-[#628563]/5"
+            : "text-gray-600 hover:text-[#628563] hover:bg-[#628563]/5",
         )}
       >
         {Icon && <Icon className="mr-3 shrink-0" size={18} />}
