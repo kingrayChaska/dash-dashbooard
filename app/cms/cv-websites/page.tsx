@@ -82,7 +82,7 @@ function CVWebsiteCard({
       {/* Thumbnail */}
       <div className="relative h-48 bg-gray-200 overflow-hidden">
         <Image
-          src={website.thumbnail || "/placeholder.jpg"}
+          src={website.thumbnail}
           alt={website.studentName}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -344,22 +344,24 @@ export default function CVWebsitesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4 lg:p-6">
       {/* Page Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 lg:mb-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-[#628563] rounded-lg">
               <FileText className="text-white" size={24} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">CV Websites</h1>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                CV Websites
+              </h1>
               <p className="text-gray-600 mt-1">
                 Manage student CV websites and portfolios
               </p>
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#628563] text-white rounded-lg hover:bg-[#527554] transition-colors duration-200">
+          <button className="flex items-center gap-2 px-4 py-2 bg-[#628563] text-white rounded-lg hover:bg-[#527554] transition-colors duration-200 w-full lg:w-auto justify-center">
             <Plus size={20} />
             <span className="font-medium">Create New</span>
           </button>
@@ -367,7 +369,7 @@ export default function CVWebsitesPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatsCard
           title="Total Websites"
           value={stats.total}
@@ -396,8 +398,8 @@ export default function CVWebsitesPage() {
 
       {/* Search and Filters */}
       <div className="bg-white rounded-lg border p-4 mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
+        <div className="flex flex-col gap-4">
+          <div className="relative">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
               size={20}
@@ -410,7 +412,7 @@ export default function CVWebsitesPage() {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#628563] focus:border-transparent outline-none"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -432,7 +434,7 @@ export default function CVWebsitesPage() {
 
       {/* Websites Grid */}
       {filteredWebsites.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
           {filteredWebsites.map((website) => (
             <CVWebsiteCard
               key={website.id}

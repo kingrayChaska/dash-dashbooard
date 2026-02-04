@@ -58,17 +58,23 @@ interface SidebarHeaderProps {
 
 function SidebarHeader({ companyName, companyInitials }: SidebarHeaderProps) {
   return (
-    <div className="flex items-center mb-8">
-      <div className="w-8 h-8 bg-[#628563] text-white flex items-center justify-center rounded-full mr-2 font-semibold text-sm">
-        {companyInitials}
+    <Link href="/">
+      <div className="flex-col font-semibold">
+        <img
+          src="Chaska-ind.png"
+          alt=""
+          width={80}
+          height={20}
+          className="rounded-sm"
+        />
       </div>
-      <h1 className="font-bold text-gray-700 text-base">{companyName}</h1>
-    </div>
+    </Link>
   );
 }
 
 interface NavItemComponentProps extends NavItem {
   isNested?: boolean;
+  onClose?: () => void;
 }
 
 function NavItemComponent({
@@ -77,17 +83,19 @@ function NavItemComponent({
   icon: Icon,
   isActive = false,
   isNested = false,
+  onClose,
 }: NavItemComponentProps) {
   return (
     <li>
       <Link
         href={href}
+        onClick={onClose}
         className={cn(
           "flex items-center py-2 px-3 rounded-lg transition-all duration-200",
           isNested && "ml-4",
           isActive
-            ? "font-semibold text-[#628563] bg-[#628563]/10"
-            : "text-gray-600 hover:text-[#628563] hover:bg-[#628563]/5",
+            ? "font-bold text-[#d9e7d9] bg-[#628563]/10"
+            : "transform text-gray-200 font-bold hover:text-gray-200 hover:bg-[#b7b160] hover:scale-105 transition duration-200 ease-in-out  ",
         )}
       >
         {Icon && <Icon className="mr-3 shrink-0" size={18} />}
@@ -99,21 +107,27 @@ function NavItemComponent({
 
 interface NavSectionComponentProps {
   section: NavSection;
+  onClose?: () => void;
 }
 
-function NavSectionComponent({ section }: NavSectionComponentProps) {
+function NavSectionComponent({ section, onClose }: NavSectionComponentProps) {
   const hasTitle = Boolean(section.title);
 
   return (
     <div className="space-y-1">
       {section.title && (
-        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider px-3 py-2 mt-6">
+        <h2 className="text-xs font-bold text-gray-200 uppercase tracking-wider px-3 py-2 mt-6">
           {section.title}
         </h2>
       )}
       <ul className="space-y-1">
         {section.items.map((item) => (
-          <NavItemComponent key={item.href} {...item} isNested={hasTitle} />
+          <NavItemComponent
+            key={item.href}
+            {...item}
+            isNested={hasTitle}
+            onClose={onClose}
+          />
         ))}
       </ul>
     </div>
@@ -121,15 +135,22 @@ function NavSectionComponent({ section }: NavSectionComponentProps) {
 }
 
 // Main component
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+export default function Sidebar({ onClose }: SidebarProps) {
   return (
-    <aside className="w-64 bg-[#f0f4f0] border-r border-gray-200 flex flex-col h-screen">
+    <aside className="w-60 bg-[#628563] border-r border-gray-700 flex flex-col h-screen">
       <div className="p-6">
         <SidebarHeader companyName="Chaska Industries" companyInitials="CI" />
-
         <nav className="space-y-2">
           {navigationSections.map((section, index) => (
-            <NavSectionComponent key={index} section={section} />
+            <NavSectionComponent
+              key={index}
+              section={section}
+              onClose={onClose}
+            />
           ))}
         </nav>
       </div>

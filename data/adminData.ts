@@ -11,7 +11,7 @@ export const admin: Admin[] = [
     id: 1,
     name: "Raymond Bamidele",
     email: "bamidele@chaskaindustries.com",
-    avatar: "/c44.jpg",
+    avatar: "/profile-img.jpg",
     role: "Administrator",
   },
 ];

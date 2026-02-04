@@ -17,7 +17,7 @@ export default function ActivityLog({ activities }: ActivityLogProps) {
       {activities.map((activity, index) => (
         <div key={index} className="flex items-start space-x-3">
           <img
-            src="c44.jpg"
+            src="profile-img.jpg"
             alt="User"
             width={32}
             height={32}
@@ -34,7 +34,7 @@ export default function ActivityLog({ activities }: ActivityLogProps) {
           </div>
         </div>
       ))}
-      <a href="#" className="text-blue-500 text-sm">
+      <a href="/announcements" className="text-blue-500 text-sm">
         See All Activities
       </a>
     </div>
