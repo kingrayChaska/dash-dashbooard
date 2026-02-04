@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Bell,
-  FileText,
-  Users,
-  Building,
-  Clipboard,
-  LucideIcon,
-} from "lucide-react";
+import { Bell, FileText, Users, Clipboard, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "../utils/formatDate";
 
@@ -38,7 +30,13 @@ const navigationSections: NavSection[] = [
   },
   {
     title: "CMS",
-    items: [{ label: "CV Websites", href: "/cms/cv-websites", icon: FileText }],
+    items: [
+      {
+        label: "CV Websites",
+        href: "/cms/cv-websites",
+        icon: FileText,
+      },
+    ],
   },
   {
     title: "STUDENT",
@@ -58,11 +56,11 @@ interface SidebarHeaderProps {
 
 function SidebarHeader({ companyName, companyInitials }: SidebarHeaderProps) {
   return (
-    <Link href="/">
+    <Link href="/" className="block mb-6">
       <div className="flex-col font-semibold">
         <img
-          src="Chaska-ind.png"
-          alt=""
+          src="/Chaska-ind.png"
+          alt={`${companyName} logo`}
           width={80}
           height={20}
           className="rounded-sm"
@@ -95,7 +93,7 @@ function NavItemComponent({
           isNested && "ml-4",
           isActive
             ? "font-bold text-[#d9e7d9] bg-[#628563]/10"
-            : "transform text-gray-200 font-bold hover:text-gray-200 hover:bg-[#b7b160] hover:scale-105 transition duration-200 ease-in-out  ",
+            : "text-gray-200 font-bold hover:text-gray-200 hover:bg-[#b7b160] hover:scale-105 transition duration-200 ease-in-out",
         )}
       >
         {Icon && <Icon className="mr-3 shrink-0" size={18} />}
@@ -141,13 +139,13 @@ interface SidebarProps {
 
 export default function Sidebar({ onClose }: SidebarProps) {
   return (
-    <aside className="w-60 bg-[#628563] border-r border-gray-700 flex flex-col h-screen">
+    <aside className="w-60 bg-[#628563] border-r border-gray-700 flex flex-col h-screen overflow-y-auto">
       <div className="p-6">
         <SidebarHeader companyName="Chaska Industries" companyInitials="CI" />
         <nav className="space-y-2">
           {navigationSections.map((section, index) => (
             <NavSectionComponent
-              key={index}
+              key={section.title || `section-${index}`}
               section={section}
               onClose={onClose}
             />
