@@ -13,15 +13,21 @@ export default function LayoutClient({ children }: LayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen((prev) => !prev);
   };
 
   return (
-    <div className="flex h-screen">
+    <div
+      className="flex h-screen bg-[#0a0a0f]"
+      style={{
+        fontFamily: "'DM Sans', sans-serif",
+        // Load fonts via global CSS or next/font ideally; kept here for portability
+      }}
+    >
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -38,7 +44,9 @@ export default function LayoutClient({ children }: LayoutClientProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         <Header onToggleSidebar={toggleSidebar} />
-        <main className="flex-1 p-4 lg:p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 lg:p-6 overflow-y-auto bg-[#0a0a0f]">
+          {children}
+        </main>
         <Footer />
       </div>
     </div>

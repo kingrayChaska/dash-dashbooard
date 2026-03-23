@@ -1,163 +1,158 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FileText,
-  Eye,
-  Edit,
-  Trash2,
-  Download,
-  Search,
-  Filter,
-  Plus,
-  Globe,
-  Calendar,
-  User,
-  CheckCircle,
-  XCircle,
-  Clock,
-  ExternalLink,
-  X,
-} from "lucide-react";
-import { cn } from "@/utils/formatDate";
-import Image from "next/image";
-import {
-  cvWebsites,
-  CVWebsite,
-  StatsCardProps,
-} from "../../../data/mockCvData";
+import { FileText, ExternalLink, Search, Plus, Globe, Eye, Edit2 } from "lucide-react";
+import { cn } from "../../../utils/formatDate";
 
-function StatsCard({ title, value, icon, color }: StatsCardProps) {
-  return (
-    <div className="bg-white rounded-lg border p-5 hover:shadow-md transition-shadow duration-200">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-600 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-gray-900">{value}</p>
-        </div>
-        <div className={cn("p-3 rounded-lg", color)}>{icon}</div>
-      </div>
-    </div>
-  );
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
+interface CVWebsite {
+  id: string | number;
+  name: string;
+  owner: string;
+  url: string;
+  status: "live" | "draft" | "archived";
+  lastUpdated: string;
+  views: number;
 }
 
-interface CVWebsiteCardProps {
+// ============================================================================
+// MOCK DATA
+// ============================================================================
+
+const mockWebsites: CVWebsite[] = [
+  {
+    id: 1,
+    name: "Raymond Bamidele — Portfolio",
+    owner: "Raymond Bamidele",
+    url: "raymond.chaska.io",
+    status: "live",
+    lastUpdated: "2024-03-10",
+    views: 1240,
+  },
+  {
+    id: 2,
+    name: "Amara Osei — Creative CV",
+    owner: "Amara Osei",
+    url: "amara.chaska.io",
+    status: "live",
+    lastUpdated: "2024-03-08",
+    views: 870,
+  },
+  {
+    id: 3,
+    name: "Leke Adeyemi — Dev CV",
+    owner: "Leke Adeyemi",
+    url: "leke.chaska.io",
+    status: "draft",
+    lastUpdated: "2024-03-05",
+    views: 0,
+  },
+  {
+    id: 4,
+    name: "Chisom Eze — Marketing CV",
+    owner: "Chisom Eze",
+    url: "chisom.chaska.io",
+    status: "archived",
+    lastUpdated: "2024-01-20",
+    views: 340,
+  },
+];
+
+// ============================================================================
+// SHARED STYLES
+// ============================================================================
+
+const statusStyles: Record<CVWebsite["status"], string> = {
+  live: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+  draft: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+  archived: "bg-[#1a1a24] text-[#4b5563] border border-[#2a2a34]",
+};
+
+// ============================================================================
+// WEBSITE CARD COMPONENT
+// ============================================================================
+
+interface WebsiteCardProps {
   website: CVWebsite;
-  onView: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
 }
 
-function CVWebsiteCard({
-  website,
-  onView,
-  onEdit,
-  onDelete,
-}: CVWebsiteCardProps) {
-  const statusConfig = {
-    active: {
-      color: "bg-green-100 text-green-800 border-green-200",
-      icon: <CheckCircle size={14} />,
-    },
-    pending: {
-      color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      icon: <Clock size={14} />,
-    },
-    inactive: {
-      color: "bg-gray-100 text-gray-800 border-gray-200",
-      icon: <XCircle size={14} />,
-    },
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
+function WebsiteCard({ website }: WebsiteCardProps) {
+  const formattedDate = new Date(website.lastUpdated).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
-    <div className="bg-white rounded-lg border overflow-hidden hover:shadow-lg transition-all duration-200 group">
-      {/* Thumbnail */}
-      <div className="relative h-48 bg-gray-200 overflow-hidden">
-        <Image
-          src={website.thumbnail}
-          alt={website.studentName}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div className="absolute top-3 right-3">
+    <div className="bg-[#111118] border border-[#c9a84c]/15 rounded-xl p-5 group hover:border-[#c9a84c]/40 hover:shadow-[0_0_20px_rgba(201,168,76,0.05)] transition-all duration-300">
+      {/* Top gold line on hover */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/0 group-hover:via-[#c9a84c]/40 to-transparent transition-all duration-300 rounded-t-xl" />
+
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="p-2 bg-[#c9a84c]/10 border border-[#c9a84c]/20 rounded-lg shrink-0">
+            <Globe size={16} className="text-[#c9a84c]" />
+          </div>
+          <div className="min-w-0">
+            <h3
+              className="text-[#d1d5db] font-medium truncate group-hover:text-[#e8c96a] transition-colors duration-200"
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.95rem" }}
+            >
+              {website.name}
+            </h3>
+            <p
+              className="text-[#4b5563] text-xs mt-0.5 truncate"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              {website.url}
+            </p>
+          </div>
+        </div>
+        <span
+          className={cn(
+            "text-[10px] px-2.5 py-1 rounded-full font-medium capitalize tracking-wide shrink-0",
+            statusStyles[website.status],
+          )}
+          style={{ fontFamily: "'DM Sans', sans-serif" }}
+        >
+          {website.status}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 text-[#4b5563]">
+            <Eye size={12} />
+            <span
+              className="text-xs"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              {website.views.toLocaleString()} views
+            </span>
+          </div>
           <span
-            className={cn(
-              "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm",
-              statusConfig[website.status].color,
-            )}
+            className="text-xs text-[#4b5563]"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
           >
-            {statusConfig[website.status].icon}
-            {website.status}
+            Updated {formattedDate}
           </span>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="p-5">
-        <div className="mb-3">
-          <h3 className="font-semibold text-lg text-gray-900 mb-1">
-            {website.studentName}
-          </h3>
-          <p className="text-sm text-gray-600">{website.studentId}</p>
-        </div>
-
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Globe size={14} className="text-gray-400" />
-            <a
-              href={website.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#628563] hover:underline truncate"
-            >
-              {website.websiteUrl}
-            </a>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <FileText size={14} className="text-gray-400" />
-            <span>{website.template}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Eye size={14} className="text-gray-400" />
-            <span>{website.views} views</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-          <span>Created: {formatDate(website.createdDate)}</span>
-          <span>Updated: {formatDate(website.lastUpdated)}</span>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2">
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
-            onClick={onView}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#628563] text-white rounded-lg hover:bg-[#527554] transition-colors duration-200"
-          >
-            <Eye size={16} />
-            <span className="text-sm font-medium">View</span>
-          </button>
-          <button
-            onClick={onEdit}
-            className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+            className="p-1.5 hover:bg-[#1a1a24] rounded-lg transition-colors"
             aria-label="Edit website"
           >
-            <Edit size={16} />
+            <Edit2 size={13} className="text-[#6b7280] hover:text-[#c9a84c]" />
           </button>
           <button
-            onClick={onDelete}
-            className="px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200"
-            aria-label="Delete website"
+            className="p-1.5 hover:bg-[#1a1a24] rounded-lg transition-colors"
+            aria-label="Open website"
           >
-            <Trash2 size={16} />
+            <ExternalLink size={13} className="text-[#6b7280] hover:text-[#c9a84c]" />
           </button>
         </div>
       </div>
@@ -165,306 +160,141 @@ function CVWebsiteCard({
   );
 }
 
-interface ViewModalProps {
-  website: CVWebsite | null;
-  onClose: () => void;
-}
+// ============================================================================
+// MAIN CV WEBSITES PAGE
+// ============================================================================
 
-function ViewModal({ website, onClose }: ViewModalProps) {
-  if (!website) return null;
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      <div className="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        {/* Header */}
-        <div className="bg-linear-to-r from-[#628563] to-[#527554] text-white p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-2xl font-bold mb-2">{website.studentName}</h2>
-              <p className="text-white/90">{website.studentId}</p>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-white/20 rounded-lg transition-colors duration-200"
-              aria-label="Close modal"
-            >
-              <X size={24} />
-            </button>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
-                Contact Information
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <User size={16} className="text-gray-400" />
-                  <span className="text-gray-700">{website.email}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Globe size={16} className="text-gray-400" />
-                  <a
-                    href={website.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#628563] hover:underline flex items-center gap-1"
-                  >
-                    {website.websiteUrl}
-                    <ExternalLink size={14} />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
-                Website Details
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <FileText size={16} className="text-gray-400" />
-                  <span className="text-gray-700">
-                    Template: {website.template}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Eye size={16} className="text-gray-400" />
-                  <span className="text-gray-700">
-                    {website.views} total views
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t pt-6">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
-              Timeline
-            </h3>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-gray-700">
-                <Calendar size={16} className="text-gray-400" />
-                <span>Created on {formatDate(website.createdDate)}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-700">
-                <Calendar size={16} className="text-gray-400" />
-                <span>Last updated on {formatDate(website.lastUpdated)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Preview */}
-          <div className="border-t pt-6 mt-6">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
-              Website Preview
-            </h3>
-            <div className="rounded-lg overflow-hidden border">
-              <Image
-                src={website.thumbnail || "/placeholder.jpg"}
-                alt={website.studentName}
-                width={400}
-                height={300}
-                className="w-full h-auto"
-              />
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-3 mt-6">
-            <a
-              href={website.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#628563] text-white rounded-lg hover:bg-[#527554] transition-colors duration-200"
-            >
-              <ExternalLink size={18} />
-              Open Website
-            </a>
-            <button className="px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center gap-2">
-              <Download size={18} />
-              Download Data
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Main component
 export default function CVWebsitesPage() {
-  const [selectedWebsite, setSelectedWebsite] = useState<CVWebsite | null>(
-    null,
-  );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<CVWebsite["status"] | "all">("all");
 
-  const filteredWebsites = cvWebsites.filter((website) => {
+  const filtered = mockWebsites.filter((site) => {
     const matchesSearch =
-      website.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      website.studentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      website.email.toLowerCase().includes(searchTerm.toLowerCase());
+      searchQuery === "" ||
+      site.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      site.owner.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === "all" || website.status === statusFilter;
+    const matchesStatus = statusFilter === "all" || site.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
 
-  const stats = {
-    total: cvWebsites.length,
-    active: cvWebsites.filter((w) => w.status === "active").length,
-    pending: cvWebsites.filter((w) => w.status === "pending").length,
-    totalViews: cvWebsites.reduce((sum, w) => sum + w.views, 0),
-  };
-
-  const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this CV website?")) {
-      console.log("Deleting website:", id);
-      // Implement delete logic
-    }
-  };
+  const liveCount = mockWebsites.filter((s) => s.status === "live").length;
+  const draftCount = mockWebsites.filter((s) => s.status === "draft").length;
+  const archivedCount = mockWebsites.filter((s) => s.status === "archived").length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 lg:p-6">
+    <div
+      className="space-y-6"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
       {/* Page Header */}
-      <div className="mb-6 lg:mb-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-[#628563] rounded-lg">
-              <FileText className="text-white" size={24} />
-            </div>
-            <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                CV Websites
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Manage student CV websites and portfolios
-              </p>
-            </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-[#c9a84c]/10 border border-[#c9a84c]/25 rounded-lg">
+            <FileText className="text-[#c9a84c]" size={20} />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#628563] text-white rounded-lg hover:bg-[#527554] transition-colors duration-200 w-full lg:w-auto justify-center">
-            <Plus size={20} />
-            <span className="font-medium">Create New</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatsCard
-          title="Total Websites"
-          value={stats.total}
-          icon={<Globe className="text-white" size={24} />}
-          color="bg-[#628563]"
-        />
-        <StatsCard
-          title="Active"
-          value={stats.active}
-          icon={<CheckCircle className="text-white" size={24} />}
-          color="bg-green-500"
-        />
-        <StatsCard
-          title="Pending Review"
-          value={stats.pending}
-          icon={<Clock className="text-white" size={24} />}
-          color="bg-yellow-500"
-        />
-        <StatsCard
-          title="Total Views"
-          value={stats.totalViews}
-          icon={<Eye className="text-white" size={24} />}
-          color="bg-blue-500"
-        />
-      </div>
-
-      {/* Search and Filters */}
-      <div className="bg-white rounded-lg border p-4 mb-6">
-        <div className="flex flex-col gap-4">
-          <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-            <input
-              type="text"
-              placeholder="Search by name, student ID, or email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#628563] focus:border-transparent outline-none"
-            />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#628563] focus:border-transparent outline-none"
-              aria-label="Filter by status"
+          <div>
+            <h1
+              className="text-[#d1d5db] font-medium leading-tight"
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.5rem" }}
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="inactive">Inactive</option>
-            </select>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-              <Filter size={18} />
-              More Filters
-            </button>
+              CV Websites
+            </h1>
+            <p className="text-[#4b5563] text-xs mt-0.5 tracking-wide">
+              Manage student CV website deployments
+            </p>
           </div>
+        </div>
+
+        <button
+          className="flex items-center gap-2 px-4 py-2 bg-[#c9a84c]/10 border border-[#c9a84c]/30 text-[#c9a84c] rounded-lg text-sm
+            hover:bg-[#c9a84c]/20 hover:border-[#c9a84c]/50 transition-all duration-200"
+        >
+          <Plus size={15} />
+          <span style={{ fontFamily: "'DM Sans', sans-serif" }}>New Website</span>
+        </button>
+      </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: "Live", value: liveCount, color: "text-emerald-400" },
+          { label: "Draft", value: draftCount, color: "text-amber-400" },
+          { label: "Archived", value: archivedCount, color: "text-[#6b7280]" },
+        ].map(({ label, value, color }) => (
+          <div
+            key={label}
+            className="bg-[#111118] border border-[#c9a84c]/15 rounded-xl p-4 text-center"
+          >
+            <div
+              className={`text-3xl font-light ${color}`}
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              {value}
+            </div>
+            <div className="text-[#6b7280] text-xs uppercase tracking-widest mt-1">
+              {label}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Search + Filter */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4b5563]" size={14} />
+          <input
+            type="text"
+            placeholder="Search by name or owner..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-[#111118] border border-[#c9a84c]/20 text-[#d1d5db] text-sm rounded-lg
+              placeholder:text-[#4b5563] focus:outline-none focus:border-[#c9a84c]/50 transition-colors"
+          />
+        </div>
+
+        <div className="flex gap-2">
+          {(["all", "live", "draft", "archived"] as const).map((option) => (
+            <button
+              key={option}
+              onClick={() => setStatusFilter(option)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs capitalize tracking-wide transition-all duration-200",
+                statusFilter === option
+                  ? "bg-[#c9a84c]/15 text-[#e8c96a] border border-[#c9a84c]/40"
+                  : "bg-[#111118] text-[#6b7280] border border-[#c9a84c]/10 hover:border-[#c9a84c]/30 hover:text-[#d1d5db]",
+              )}
+            >
+              {option}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Websites Grid */}
-      {filteredWebsites.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
-          {filteredWebsites.map((website) => (
-            <CVWebsiteCard
-              key={website.id}
-              website={website}
-              onView={() => setSelectedWebsite(website)}
-              onEdit={() => console.log("Edit:", website.id)}
-              onDelete={() => handleDelete(website.id)}
-            />
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filtered.map((website) => (
+            <div key={website.id} className="relative">
+              <WebsiteCard website={website} />
+            </div>
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-white rounded-lg border">
-          <FileText className="mx-auto text-gray-400 mb-4" size={48} />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            No CV websites found
+        <div className="bg-[#111118] border border-[#c9a84c]/15 rounded-xl p-12 text-center">
+          <FileText className="mx-auto text-[#2a2a34] mb-4" size={40} />
+          <h3
+            className="text-[#6b7280] mb-1"
+            style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem" }}
+          >
+            No websites found
           </h3>
-          <p className="text-gray-600 mb-4">
-            Try adjusting your search or filter criteria
+          <p className="text-[#4b5563] text-xs">
+            {searchQuery ? "Try a different search term" : "No websites match your filter"}
           </p>
-          <button className="px-4 py-2 bg-[#628563] text-white rounded-lg hover:bg-[#527554] transition-colors duration-200">
-            Clear Filters
-          </button>
         </div>
       )}
-
-      {/* View Modal */}
-      <ViewModal
-        website={selectedWebsite}
-        onClose={() => setSelectedWebsite(null)}
-      />
     </div>
   );
 }

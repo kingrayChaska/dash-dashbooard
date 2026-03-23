@@ -66,10 +66,7 @@ const formatRelativeTime = (dateString: string): string => {
   if (diffInSeconds < 604800)
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
 
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
 // ============================================================================
@@ -83,10 +80,8 @@ function NotificationButton({
 }: NotificationButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
-
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  // Close notification panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -96,7 +91,6 @@ function NotificationButton({
         setIsOpen(false);
       }
     };
-
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       return () =>
@@ -108,100 +102,106 @@ function NotificationButton({
     if (!notification.isRead && onMarkAsRead) {
       onMarkAsRead(notification.id);
     }
-    if (notification.href) {
-      router.push(notification.href);
-    }
-  };
-
-  const handleMarkAllAsRead = () => {
-    if (onMarkAllAsRead) {
-      onMarkAllAsRead();
-    }
   };
 
   return (
     <div className="relative" ref={notifRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 hover:bg-gray-200/50 rounded-lg transition-all duration-200 group"
+        className="relative p-2 hover:bg-[#1a1a24] rounded-lg transition-all duration-200 group"
         aria-label="Notifications"
         aria-expanded={isOpen ? "true" : "false"}
       >
         <Bell
-          size={20}
+          size={18}
           className={cn(
             "transition-all duration-200",
             isOpen
-              ? "text-[#628563]"
-              : "text-gray-600 group-hover:text-gray-800",
+              ? "text-[#c9a84c]"
+              : "text-[#6b7280] group-hover:text-[#d1d5db]",
           )}
         />
         {unreadCount > 0 && (
           <span
             className={cn(
-              "absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center min-w-[20px] h-5 px-1",
-              unreadCount > 0 && !isOpen && "animate-pulse",
+              "absolute -top-0.5 -right-0.5 bg-[#c9a84c] text-[#0a0a0f] text-[10px] font-bold rounded-full flex items-center justify-center min-w-[16px] h-4 px-1",
+              !isOpen && "animate-pulse",
             )}
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
           >
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
       </button>
 
-      {/* Notification Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          {/* Header */}
-          <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="absolute right-0 mt-2 w-96 bg-[#111118] rounded-xl border border-[#c9a84c]/20 shadow-2xl shadow-black/60 z-50">
+          {/* Top gold line */}
+          <div className="h-px bg-gradient-to-r from-[#c9a84c] via-[#e8c96a]/50 to-transparent rounded-t-xl" />
+
+          <div className="p-4 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-gray-900">Notifications</h3>
+              <h3
+                className="font-semibold text-[#d1d5db] text-sm"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1rem",
+                }}
+              >
+                Notifications
+              </h3>
               {unreadCount > 0 && (
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p
+                  className="text-xs text-[#6b7280] mt-0.5"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
                   {unreadCount} unread
                 </p>
               )}
             </div>
             {unreadCount > 0 && (
               <button
-                onClick={handleMarkAllAsRead}
-                className="text-xs text-[#628563] hover:text-[#527452] font-medium transition-colors"
+                onClick={onMarkAllAsRead}
+                className="text-xs text-[#c9a84c] hover:text-[#e8c96a] font-medium transition-colors tracking-wide"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
-                Mark all as read
+                Mark all read
               </button>
             )}
           </div>
 
-          {/* Notifications List */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto border-t border-[#1a1a24]">
             {notifications.length > 0 ? (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-[#1a1a24]">
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
                     onClick={() => handleNotificationClick(notification)}
                     className={cn(
-                      "p-4 hover:bg-gray-50 transition-colors cursor-pointer relative",
-                      !notification.isRead && "bg-blue-50/30",
+                      "p-4 hover:bg-[#1a1a24] transition-colors cursor-pointer relative",
+                      !notification.isRead && "bg-[#c9a84c]/[0.03]",
                     )}
                   >
                     {!notification.isRead && (
-                      <div className="absolute left-2 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#628563] rounded-full" />
+                      <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#c9a84c] rounded-full" />
                     )}
-                    <div className={cn(!notification.isRead && "pl-4")}>
+                    <div className={cn(!notification.isRead && "pl-3")}>
                       <p
-                        className={cn(
-                          "text-sm font-medium",
-                          notification.isRead
-                            ? "text-gray-700"
-                            : "text-gray-900",
-                        )}
+                        className="text-sm font-medium text-[#d1d5db]"
+                        style={{ fontFamily: "'DM Sans', sans-serif" }}
                       >
                         {notification.title}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                      <p
+                        className="text-xs text-[#6b7280] mt-1 line-clamp-2"
+                        style={{ fontFamily: "'DM Sans', sans-serif" }}
+                      >
                         {notification.description}
                       </p>
-                      <p className="text-xs text-gray-400 mt-2">
+                      <p
+                        className="text-xs text-[#4b5563] mt-1.5"
+                        style={{ fontFamily: "'DM Sans', sans-serif" }}
+                      >
                         {formatRelativeTime(notification.timestamp)}
                       </p>
                     </div>
@@ -210,18 +210,23 @@ function NotificationButton({
               </div>
             ) : (
               <div className="p-8 text-center">
-                <Bell size={32} className="mx-auto text-gray-300 mb-2" />
-                <p className="text-sm text-gray-500">No notifications</p>
+                <Bell size={28} className="mx-auto text-[#2a2a34] mb-2" />
+                <p
+                  className="text-sm text-[#4b5563]"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  No notifications
+                </p>
               </div>
             )}
           </div>
 
-          {/* Footer */}
           {notifications.length > 0 && (
-            <div className="p-3 border-t border-gray-100">
+            <div className="p-3 border-t border-[#1a1a24]">
               <a
                 href="/announcements"
-                className="text-sm text-[#628563] hover:text-[#527452] font-medium transition-colors block text-center"
+                className="text-xs text-[#c9a84c] hover:text-[#e8c96a] font-medium transition-colors block text-center tracking-wider uppercase"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
                 View all announcements →
               </a>
@@ -242,14 +247,12 @@ function UserMenu({ user, onLogout }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -273,12 +276,19 @@ function UserMenu({ user, onLogout }: UserMenuProps) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 hover:bg-gray-200/50 rounded-lg px-3 py-2 transition-colors duration-200 group"
+        className="flex items-center gap-3 hover:bg-[#1a1a24] rounded-lg px-3 py-2 transition-colors duration-200 group"
         aria-expanded={isOpen ? "true" : "false"}
         aria-haspopup="true"
       >
         <div className="relative">
-          <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-gray-200 group-hover:ring-[#628563] transition-all">
+          <div
+            className={cn(
+              "w-8 h-8 rounded-full overflow-hidden ring-1 transition-all",
+              isOpen
+                ? "ring-[#c9a84c]"
+                : "ring-[#2a2a34] group-hover:ring-[#c9a84c]/50",
+            )}
+          >
             {user.avatar ? (
               <Image
                 src={user.avatar}
@@ -288,44 +298,64 @@ function UserMenu({ user, onLogout }: UserMenuProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-[#628563] flex items-center justify-center text-white text-sm font-semibold">
+              <div className="w-full h-full bg-[#c9a84c]/10 flex items-center justify-center text-[#c9a84c] text-sm font-semibold">
                 {user.name.charAt(0).toUpperCase()}
               </div>
             )}
           </div>
-          <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#f0f4f0] rounded-full" />
+          <span className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 border-2 border-[#0d0d14] rounded-full" />
         </div>
 
         <div className="hidden md:block text-left">
-          <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
+          <p
+            className="text-sm font-medium text-[#d1d5db] group-hover:text-[#e8c96a] transition-colors"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+          >
             {user.name}
           </p>
-          {user.role && <p className="text-xs text-gray-500">{user.role}</p>}
+          {user.role && (
+            <p
+              className="text-xs text-[#4b5563]"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              {user.role}
+            </p>
+          )}
         </div>
 
         <ChevronDown
-          size={16}
+          size={14}
           className={cn(
-            "text-gray-500 transition-transform duration-200 hidden md:block",
+            "text-[#4b5563] transition-transform duration-200 hidden md:block",
             isOpen && "rotate-180",
           )}
         />
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          {/* User Info */}
-          <div className="px-4 py-3 border-b border-gray-100">
-            <p className="text-sm font-semibold text-gray-900">{user.name}</p>
+        <div className="absolute right-0 mt-2 w-56 bg-[#111118] rounded-xl border border-[#c9a84c]/20 shadow-2xl shadow-black/60 py-1 z-50">
+          <div className="h-px bg-gradient-to-r from-[#c9a84c] via-[#e8c96a]/50 to-transparent rounded-t-xl" />
+
+          <div className="px-4 py-3 border-b border-[#1a1a24]">
+            <p
+              className="text-sm font-semibold text-[#d1d5db]"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "1rem",
+              }}
+            >
+              {user.name}
+            </p>
             {user.email && (
-              <p className="text-xs text-gray-500 mt-0.5 truncate">
+              <p
+                className="text-xs text-[#4b5563] mt-0.5 truncate"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
                 {user.email}
               </p>
             )}
           </div>
 
-          {/* Menu Items */}
           <div className="py-1">
             {menuItems.map((item) => (
               <button
@@ -334,13 +364,14 @@ function UserMenu({ user, onLogout }: UserMenuProps) {
                   handleMenuItemClick(item.href, item.label === "Logout")
                 }
                 className={cn(
-                  "w-full flex items-center px-4 py-2 text-sm transition-colors duration-150",
+                  "w-full flex items-center px-4 py-2.5 text-sm transition-colors duration-150",
                   item.danger
-                    ? "text-red-600 hover:bg-red-50"
-                    : "text-gray-700 hover:bg-gray-50",
+                    ? "text-rose-500 hover:bg-rose-500/5"
+                    : "text-[#6b7280] hover:bg-[#1a1a24] hover:text-[#d1d5db]",
                 )}
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
-                <item.icon size={16} className="mr-3" />
+                <item.icon size={15} className="mr-3" />
                 {item.label}
               </button>
             ))}
@@ -370,34 +401,50 @@ export default function Header({
   onLogout,
 }: HeaderProps) {
   return (
-    <header className="bg-[#f0f4f0] border-b border-gray-200 sticky top-0 z-40">
-      <div className="px-6 py-4 flex justify-between items-center">
+    <header className="bg-[#0d0d14] border-b border-[#c9a84c]/15 sticky top-0 z-40">
+      {/* Very subtle top gold line */}
+      <div className="h-px bg-gradient-to-r from-transparent via-[#c9a84c]/20 to-transparent" />
+
+      <div className="px-6 py-3.5 flex justify-between items-center">
         {/* Left section */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-4">
           {onToggleSidebar && (
             <button
               onClick={onToggleSidebar}
-              className="p-2 hover:bg-gray-200/50 rounded-lg transition-colors duration-200 lg:hidden"
+              className="p-2 hover:bg-[#1a1a24] rounded-lg transition-colors duration-200 lg:hidden"
               aria-label="Toggle sidebar"
             >
-              <Menu size={20} className="text-gray-600" />
+              <Menu size={18} className="text-[#6b7280]" />
             </button>
           )}
           <div>
-            <h2 className="font-semibold text-gray-800 text-lg">{user.name}</h2>
-            <p className="text-sm text-gray-600 mt-0.5">
-              Welcome to Chaska Industries
+            <h2
+              className="text-[#d1d5db] font-light leading-tight"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "1.2rem",
+              }}
+            >
+              {user.name}
+            </h2>
+            <p
+              className="text-[#4b5563] text-xs tracking-wider mt-0.5"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              Welcome back to{" "}
+              <span className="text-[#c9a84c]/70">Chaska Industries</span>
             </p>
           </div>
         </div>
 
         {/* Right section */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-1">
           <NotificationButton
             notifications={notifications}
             onMarkAsRead={onMarkNotificationAsRead}
             onMarkAllAsRead={onMarkAllNotificationsAsRead}
           />
+          <div className="w-px h-6 bg-[#1a1a24] mx-1" />
           <UserMenu user={user} onLogout={onLogout} />
         </div>
       </div>

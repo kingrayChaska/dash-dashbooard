@@ -1,20 +1,14 @@
-# Mobile Responsiveness and MVP Improvements
+# TODO: Fix TypeScript Build Error (Plan Approved)
 
-## Layout Changes
+**✅ Step 1: Create TODO.md** - Completed  
+**✅ Step 2: Edit app/announcements/page.tsx** - Completed
 
-- [ ] Update app/layout.tsx for mobile-first responsive layout
-- [ ] Make sidebar hidden on mobile and toggleable
-- [ ] Fix footer positioning to avoid overlap
+- Added `import React from "react";`
+- Changed `Record<Priority, JSX.Element>` → `Record<Priority, React.ReactNode>`
 
-## Component Updates
+## Remaining Steps:
 
-- [ ] Update components/Sidebar.tsx for mobile behavior
-- [ ] Update components/Header.tsx to implement sidebar toggle
-- [ ] Update app/page.tsx dashboard for responsive grids
-- [ ] Update app/cms/cv-websites/page.tsx for responsive grids
-- [ ] Update dashboard components for mobile breakpoints
+- [ ] **Step 3**: Test with `npm run build`
+- [ ] **Step 4**: Mark complete ✓
 
-## Testing and Finalization
-
-- [ ] Test mobile responsiveness across different screen sizes
-- [ ] Ensure MVP functionality is intact
+**Next action**: New TypeScript error found in components/PostStatsChart.tsx - fixed it. Now run `npm run build` to check if fully resolved.

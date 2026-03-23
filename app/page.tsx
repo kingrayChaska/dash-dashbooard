@@ -1,18 +1,47 @@
 "use client";
 
 import { useDashboardData } from "../hooks/useDashboardData";
-import StatsCard from "../components/dashboard/StatsCard";
-import PostStatsChart from "../components/dashboard/PostStatsChart";
-import ActivityLog from "../components/dashboard/ActivityLog";
-import CompaniesTable from "../components/dashboard/CompaniesTable";
+import StatsCard from "../components/StatsCard";
+import PostStatsChart from "../components/PostStatsChart";
+import ActivityLog from "../components/ActivityLog";
+import CompaniesTable from "../components/CompaniesTable";
+
+const cardClass =
+  "bg-[#111118] border border-[#c9a84c]/20 rounded-xl p-5 shadow-xl shadow-black/30";
+
+const selectClass =
+  "text-xs bg-[#1a1a24] border border-[#c9a84c]/20 text-[#6b7280] rounded-lg px-3 py-1.5 outline-none hover:border-[#c9a84c]/40 focus:border-[#c9a84c]/50 transition-colors cursor-pointer";
+
+interface SectionHeaderProps {
+  title: string;
+  children?: React.ReactNode;
+}
+
+function SectionHeader({ title, children }: SectionHeaderProps) {
+  return (
+    <div className="flex items-center justify-between mb-5">
+      <h3
+        className="text-[#d1d5db] font-light"
+        style={{ fontFamily: "'Cormorant Garant', serif", fontSize: "1.15rem" }}
+      >
+        {title}
+      </h3>
+      {children && <div className="flex items-center gap-2">{children}</div>}
+    </div>
+  );
+}
+
+// ============================================================================
+// MAIN DASHBOARD PAGE
+// ============================================================================
 
 export default function Dashboard() {
   const { stats, chartData, activities, companies } = useDashboardData();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#628563] p-4 rounded-lg">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {stats.map((stat, index) => (
           <StatsCard key={index} title={stat.title} value={stat.value} />
         ))}
@@ -20,53 +49,46 @@ export default function Dashboard() {
 
       {/* Chart and Activity Log */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="bg-[#628563] p-4 rounded-lg shadow">
-          <div className="flex justify-between mb-4">
-            <h3 className="text-gray-200 font-semibold">Post Statistics</h3>
-            <select
-              className="text-sm border rounded p-1"
-              title="Select time range"
-            >
-              <option className="text-gray-500">Two Months Ago</option>
-              <option className="text-gray-500">Last Month</option>
-              <option className="text-gray-500">This Month</option>
+        {/* Post Statistics */}
+        <div className={cardClass}>
+          <SectionHeader title="Post Statistics">
+            <select className={selectClass} title="Select time range">
+              <option>Two Months Ago</option>
+              <option>Last Month</option>
+              <option>This Month</option>
             </select>
-            <select
-              className="text-sm border rounded p-1"
-              title="Select time range"
-            >
-              <option className="text-gray-500">Jobs Only</option>
+            <select className={selectClass} title="Filter by type">
+              <option>All Types</option>
+              <option>Jobs Only</option>
+              <option>Projects Only</option>
+              <option>Courses Only</option>
             </select>
-          </div>
+          </SectionHeader>
           <PostStatsChart data={chartData} />
         </div>
-        <div className="bg-[#628563] p-4 rounded-lg shadow">
-          <div className="flex justify-between mb-4">
-            <h3 className="text-gray-200 font-semibold">Activity Log</h3>
-            <select
-              className="text-sm text-gray-200 border rounded p-1"
-              title="Select activity period"
-            >
+
+        {/* Activity Log */}
+        <div className={cardClass}>
+          <SectionHeader title="Activity Log">
+            <select className={selectClass} title="Select activity period">
               <option>Today</option>
+              <option>This Week</option>
+              <option>This Month</option>
             </select>
-          </div>
+          </SectionHeader>
           <ActivityLog activities={activities} />
         </div>
       </div>
 
       {/* Companies Table */}
-      <div className="bg-[#628563] p-4 rounded-lg shadow">
-        <div className="text-gray-200 flex justify-between mb-4">
-          <h3 className=" font-semibold">Companies Statistics</h3>
-          <select
-            className="text-sm border rounded p-1"
-            title="Select company stats period"
-          >
+      <div className={cardClass}>
+        <SectionHeader title="Companies Statistics">
+          <select className={selectClass} title="Select company stats period">
             <option>Monthly</option>
             <option>Weekly</option>
             <option>Daily</option>
           </select>
-        </div>
+        </SectionHeader>
         <CompaniesTable companies={companies} />
       </div>
     </div>

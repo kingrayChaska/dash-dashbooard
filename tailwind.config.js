@@ -21,11 +21,11 @@ module.exports = {
         in: "fade-in 0.2s ease-out",
       },
       colors: {
-        primary: "#3b82f6", // Blue for accents
-        secondary: "#10b981", // Green for projects
-        tertiary: "#f59e0b", // Yellow for courses
-        neutral: "#f3f4f6", // Light gray bg
-        dark: "#1f2937", // Dark text
+        primary: "#3b82f6",
+        secondary: "#10b981",
+        tertiary: "#f59e0b",
+        neutral: "#f3f4f6",
+        dark: "#1f2937",
       },
     },
   },
